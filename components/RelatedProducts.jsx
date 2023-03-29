@@ -8,7 +8,7 @@ const RelatedProducts = ({ products, sid }) => {
   const filteredProducts = products.filter(function (product) {
     return product._id !== sid;
   });
-  console.log(products);
+  // console.log(products);
 
   const responsive = {
     desktop: {

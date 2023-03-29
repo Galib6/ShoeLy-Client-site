@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { IoMdHeartEmpty } from "react-icons/io";
 import Wrapper from "@/components/Wrapper";
 import ProductDetailsCarousel from "@/components/ProductDetailsCarousel";
@@ -9,16 +9,20 @@ import {
   getDiscountedPricePercentage,
 } from "@/utils/helper";
 import ReactMarkdown from "react-markdown";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
+import { API_URL } from "@/utils/urls";
+import { ImSpinner8 } from "react-icons/im";
+import { AuthContext } from "@/context/AuthProvider";
 
 const ProductDetails = () => {
+  const { setCart, cart } = useContext(AuthContext);
   const [product, setProduct] = useState();
   const [sameCatProduct, setSameCatProduct] = useState();
-  const [selectedSize, setSelectedSize] = useState();
+  const [selectedSize, setSelectedSize] = useState(null);
   const [showError, setShowError] = useState(false);
+  const [cartLoading, setCartLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -56,6 +60,35 @@ const ProductDetails = () => {
     });
   };
 
+  const handleAddToCart = () => {
+    if (!selectedSize) return setShowError(true);
+    setCartLoading(true);
+    const { pid, title, suntitle, price, thumb, _id } = product;
+    const productForCart = {
+      pid,
+      title,
+      suntitle,
+      price,
+      selectedSize,
+      thumb,
+      productId: _id,
+    };
+    fetch(`${API_URL}/api/cart`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(productForCart),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setCartLoading(false);
+        setCart([...cart, productForCart]);
+        notify();
+        console.log(cart);
+      });
+  };
+
   return (
     <div className="w-full md:py-20">
       <ToastContainer />
@@ -76,7 +109,7 @@ const ProductDetails = () => {
 
             {/* PRODUCT SUBTITLE */}
             <div className="text-lg font-semibold mb-5">
-              {product?.subtitle}
+              {product?.suntitle}
             </div>
 
             {/* PRODUCT PRICE */}
@@ -123,9 +156,9 @@ const ProductDetails = () => {
                       item.sta
                         ? "hover:border-black cursor-pointer"
                         : "cursor-not-allowed bg-black/[0.1] opacity-50"
-                    } ${selectedSize === item.size ? "border-black" : ""}`}
+                    } ${selectedSize === item.type ? "border-black" : ""}`}
                     onClick={() => {
-                      setSelectedSize(item.size);
+                      setSelectedSize(item?.type);
                       setShowError(false);
                     }}
                   >
@@ -146,12 +179,21 @@ const ProductDetails = () => {
             {/* PRODUCT SIZE RANGE END */}
 
             {/* ADD TO CART BUTTON START */}
-            <button
-              className="w-full py-4 rounded-full bg-black text-white text-lg font-medium transition-transform active:scale-95 mb-3 hover:opacity-75"
-              // onClick={() => }
-            >
-              Add to Cart
-            </button>
+            {!cartLoading ? (
+              <button
+                className="w-full py-4 rounded-full bg-black text-white text-lg font-medium transition-transform active:scale-95 mb-3 hover:opacity-75"
+                onClick={handleAddToCart}
+              >
+                Add to Cart
+              </button>
+            ) : (
+              <button
+                className="w-full py-4 rounded-full bg-black text-white text-lg font-medium transition-transform active:scale-95 mb-3 hover:opacity-75 flex justify-center items-center"
+                onClick={handleAddToCart}
+              >
+                <ImSpinner8 className="animate-spin " />
+              </button>
+            )}
             {/* ADD TO CART BUTTON END */}
 
             {/* WHISHLIST BUTTON START */}
