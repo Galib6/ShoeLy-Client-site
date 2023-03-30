@@ -40,22 +40,24 @@ const Header = () => {
     };
   }, [lastScrollY]);
 
-  useEffect(() => {
-    // fetchCategories();
-  }, []);
+  const { user, logOut } = useContext(AuthContext);
+  // console.log(user)
 
-  // const fetchCategories = async () => {
-  //     const { data } = await fetchDataFromApi("/api/categories?populate=*");
-  //     setCategories(data);
-  // };
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {})
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <header
-      className={`w-full h-[50px] md:h-[80px] bg-white flex items-center justify-between z-20 sticky top-0 transition-transform duration-300 shadow-lg ${show}`}
+      className={`w-full h-[50px] md:h-[80px] bg-white flex items-center justify-between z-20 sticky top-0 transition-transform duration-300 shadow-md ${show}`}
     >
       <Wrapper className="h-[60px] flex justify-between items-center">
         <Link href="/">
-          <h1 className="font-bold text-[30px] flex justify-center">
+          <h1 className="font-bold text-[30px] flex justify-center text-neutral-600">
             Shoe.Ly{" "}
             <span className="">
               <svg
@@ -111,6 +113,31 @@ const Header = () => {
               )}
             </div>
           </Link>
+          {user && (
+            <div className="dropdown dropdown-end">
+              <label tabIndex={0} className="">
+                <div className="w-8 md:w-12 h-8 md:h-12 rounded-full flex justify-center items-center hover:bg-black/[0.05] cursor-pointer relative">
+                  <div className="avatar">
+                    <div className="w-10 rounded-full">
+                      <img src={user?.photoURL} />
+                    </div>
+                  </div>
+                </div>
+              </label>
+              <ul
+                tabIndex={0}
+                className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+              >
+                <li>
+                  <a>{user?.displayName}</a>
+                </li>
+                <li>
+                  <button onClick={handleLogOut}>Log out</button>
+                </li>
+              </ul>
+            </div>
+          )}
+
           {/* Icon end */}
 
           {/* Mobile icon start */}

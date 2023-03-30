@@ -9,7 +9,7 @@ const ProductCard = ({ data }) => {
       className="transform overflow-hidden bg-white duration-200 hover:scale-105 cursor-pointer"
     >
       <img
-        className=" h-[400px] w-[500px] object-cover"
+        className=" h-[400px] w-[400px] object-cover"
         src={data.thumb}
         alt={data.title}
       />
