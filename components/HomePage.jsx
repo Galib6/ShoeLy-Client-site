@@ -42,22 +42,24 @@ const HomePage = () => {
             </Link>
           </div>
         </div>
-        {/* heading and paragaph end */}
-        <div class="bg-[#EDE734] h-[150px] flex justify-center items-center">
-          <h1 className="text-[40px] font-bold mr-4">
-            BECOME A MEMBER &amp; GET 10% OFF
-          </h1>
-          <button
-            className="flex justify-center items-center h-6 p-5 rounded-full bg-black text-white text-lg font-medium transition-transform active:scale-95  hover:opacity-75 "
-            // onClick={() => }
-          >
-            Sign in
-          </button>
-        </div>
+      </Wrapper>
+      {/* heading and paragaph end */}
+      <div className="bg-[#EDE734] h-[150px] flex justify-center items-center">
+        <h1 className="text-[40px] font-bold mr-4">
+          BECOME A MEMBER &amp; GET 10% OFF
+        </h1>
+        <button
+          className="flex justify-center items-center h-6 p-5 rounded-full bg-black text-white text-lg font-medium transition-transform active:scale-95  hover:opacity-75 "
+          // onClick={() => }
+        >
+          Sign in
+        </button>
+      </div>
+      <Wrapper>
         {/* products grid start */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 my-14 px-5 md:px-0">
-          {products?.map((product) => (
-            <ProductCard key={product?.id} data={product} />
+          {products?.map((product, i) => (
+            <ProductCard key={i} data={product} />
           ))}
         </div>
         {/* products grid end */}

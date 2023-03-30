@@ -4,8 +4,11 @@ import Head from "next/head";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AuthProvider from "@/context/AuthProvider";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ToastContainer } from "react-toastify";
 
 export default function App({ Component, pageProps }) {
+  const queryClient = new QueryClient();
   return (
     <>
       <Head>
@@ -25,9 +28,12 @@ export default function App({ Component, pageProps }) {
         />
       </Head>
       <AuthProvider>
-        <Header />
-        <Component {...pageProps} />
-        <Footer />
+        <QueryClientProvider client={queryClient}>
+          <Header />
+          <ToastContainer />
+          <Component {...pageProps} />
+          <Footer />
+        </QueryClientProvider>
       </AuthProvider>
     </>
   );

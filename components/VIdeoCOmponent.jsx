@@ -3,12 +3,12 @@ import React from "react";
 
 const VIdeoCOmponent = () => {
   return (
-    <div class="relative flex items-center justify-center h-screen overflow-hidden">
-      <div class="relative z-30 p-5 text-2xl text-white bg-purple-300 bg-opacity-50 rounded-xl">
+    <div className="relative flex items-center justify-center h-screen overflow-hidden">
+      <div className="relative z-30 p-5 text-2xl text-white bg-purple-300 bg-opacity-50 rounded-xl">
         Welcome to my site!
       </div>
       <video
-        class="absolute z-10 w-auto"
+        className="absolute z-10 w-auto"
         autoplay={true}
         loop
         muted

@@ -51,7 +51,7 @@ const Header = () => {
 
   return (
     <header
-      className={`w-full h-[50px] md:h-[80px] bg-white flex items-center justify-between z-20 sticky top-0 transition-transform duration-300 ${show}`}
+      className={`w-full h-[50px] md:h-[80px] bg-white flex items-center justify-between z-20 sticky top-0 transition-transform duration-300 shadow-lg ${show}`}
     >
       <Wrapper className="h-[60px] flex justify-between items-center">
         <Link href="/">
@@ -63,7 +63,7 @@ const Header = () => {
                 width="16"
                 height="16"
                 fill="currentColor"
-                class="bi bi-cart4"
+                className="bi bi-cart4"
                 viewBox="0 0 16 16"
               >
                 {" "}

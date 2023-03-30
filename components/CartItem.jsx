@@ -1,8 +1,38 @@
+import { API_URL } from "@/utils/urls";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { toast } from "react-toastify";
 
-const CartItem = ({ data }) => {
+const CartItem = ({ data, refetch }) => {
+  const [DeleteLoading, setDeleteLoading] = useState(false);
+
+  const notify = () => {
+    toast.success("Success. This Product removed from your cart", {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  };
+
+  const handleDelete = (id) => {
+    setDeleteLoading(true);
+    fetch(`${API_URL}/api/cartitemdelete/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.deletedCount > 0) {
+          console.log(data);
+          notify();
+          refetch;
+        }
+      });
+  };
+
   return (
     <div className="flex py-5 gap-3 md:gap-5 border-b">
       {/* IMAGE START */}
@@ -42,18 +72,12 @@ const CartItem = ({ data }) => {
 
             <div className="flex items-center gap-1">
               <div className="font-semibold">Quantity: 1</div>
-              {/* <select className="hover:text-black">
-                {Array.from({ length: 10 }, (_, i) => i + 1).map((q, i) => {
-                  return (
-                    <option key={i} value={q} selected={data.quantity === q}>
-                      {q}
-                    </option>
-                  );
-                })}
-              </select> */}
             </div>
           </div>
-          <RiDeleteBin6Line className="cursor-pointer text-black/[0.5] hover:text-black text-[16px] md:text-[20px]" />
+          <RiDeleteBin6Line
+            className="cursor-pointer text-black/[0.5] hover:text-black text-[16px] md:text-[20px]"
+            onClick={() => handleDelete(data._id)}
+          />
         </div>
       </div>
     </div>

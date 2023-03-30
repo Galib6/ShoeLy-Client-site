@@ -7,6 +7,7 @@ import { fetchDataFromApi } from "@/utils/api";
 import {
   getDiscountedPrice,
   getDiscountedPricePercentage,
+  notify,
 } from "@/utils/helper";
 import ReactMarkdown from "react-markdown";
 import { ToastContainer, toast } from "react-toastify";
@@ -24,6 +25,19 @@ const ProductDetails = () => {
   const [showError, setShowError] = useState(false);
   const [cartLoading, setCartLoading] = useState(false);
   const router = useRouter();
+
+  const notify = () => {
+    toast.success("Success. Check your cart!", {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -47,19 +61,6 @@ const ProductDetails = () => {
     }
   }, [product?.pid]);
 
-  const notify = () => {
-    toast.success("Success. Check your cart!", {
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
-  };
-
   const handleAddToCart = () => {
     if (!selectedSize) return setShowError(true);
     setCartLoading(true);
@@ -81,17 +82,15 @@ const ProductDetails = () => {
       body: JSON.stringify(productForCart),
     })
       .then((res) => res.json())
-      .then((res) => {
+      .then((data) => {
         setCartLoading(false);
         setCart([...cart, productForCart]);
         notify();
-        console.log(cart);
       });
   };
 
   return (
     <div className="w-full md:py-20">
-      <ToastContainer />
       <Wrapper>
         <div className="flex flex-col lg:flex-row md:px-10 gap-[50px] lg:gap-[100px]">
           {/* left column start */}

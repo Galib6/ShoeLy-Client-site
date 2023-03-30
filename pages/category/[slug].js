@@ -4,7 +4,6 @@ import ProductCard from "@/components/ProductCard";
 import { fetchDataFromApi } from "@/utils/api";
 import { useRouter } from "next/router";
 import Pagination from "@/components/Pagination";
-const maxResult = 3;
 
 const Category = () => {
   const [products, setProducts] = useState();
@@ -73,10 +72,10 @@ const Category = () => {
         {isLoading && (
           <div className="absolute top-0 left-0 w-full h-full bg-white/[0.5] flex flex-col gap-5 justify-center items-center ">
             {/* <img src="/logo.svg" width={150} /> */}
-            <div class="h-screen bg-white">
-              <div class="flex justify-center items-center h-full">
+            <div className="h-screen bg-white">
+              <div className="flex justify-center items-center h-full">
                 <img
-                  class="h-16 w-16"
+                  className="h-16 w-16"
                   src="https://icons8.com/preloaders/preloaders/1488/Iphone-spinner-2.gif"
                   alt=""
                 />

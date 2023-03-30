@@ -3,19 +3,33 @@ import Image from "next/image";
 import Link from "next/link";
 import Wrapper from "@/components/Wrapper";
 import CartItem from "@/components/CartItem";
-
-// import { makePaymentRequest } from "@/utils/api";
-// import { loadStripe } from "@stripe/stripe-js";
 import { AuthContext } from "@/context/AuthProvider";
+import { useQuery } from "@tanstack/react-query";
+import { API_URL } from "@/utils/urls";
 
 const Cart = () => {
   const [loading, setLoading] = useState(false);
+
   const { cart, setCart } = useContext(AuthContext);
 
   let subTotal = 0;
   for (let i = 0; i < cart.length; i++) {
     subTotal = parseInt(subTotal) + parseInt(cart[i].price);
   }
+
+  const {
+    data: products = [],
+    refetch,
+    isLoading,
+  } = useQuery({
+    queryKey: ["posts"],
+    queryFn: async () => {
+      const res = await fetch(`${API_URL}/api/cart`);
+      const data = await res.json();
+      setCart(data);
+      return data;
+    },
+  });
 
   return (
     <div className="w-full md:py-20">
@@ -35,8 +49,8 @@ const Cart = () => {
               {/* CART ITEMS START */}
               <div className="flex-[2]">
                 <div className="text-lg font-bold">Cart Items</div>
-                {cart?.map((item) => (
-                  <CartItem key={item.id} data={item} />
+                {cart?.map((item, i) => (
+                  <CartItem key={i} refetch={refetch()} data={item} />
                 ))}
               </div>
               {/* CART ITEMS END */}
@@ -63,13 +77,15 @@ const Cart = () => {
                 </div>
 
                 {/* BUTTON START */}
-                <button
-                  className="w-full py-4 rounded-full bg-black text-white text-lg font-medium transition-transform active:scale-95 mb-3 hover:opacity-75 flex items-center gap-2 justify-center"
-                  //   onClick={handlePayment}
-                >
-                  Checkout
-                  {loading && <img src="/spinner.svg" />}
-                </button>
+                <Link href="/payments/63d2cf19ceb5dde05c5952f2">
+                  <button
+                    className="w-full py-4 rounded-full bg-black text-white text-lg font-medium transition-transform active:scale-95 mb-3 hover:opacity-75 flex items-center gap-2 justify-center"
+                    //   onClick={handlePayment}
+                  >
+                    Checkout
+                    {/* {loading && <img src="/spinner.svg" />} */}
+                  </button>
+                </Link>
                 {/* BUTTON END */}
               </div>
               {/* SUMMARY END */}

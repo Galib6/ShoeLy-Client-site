@@ -30,8 +30,8 @@ const RelatedProducts = ({ products, sid }) => {
       <div className="text-2xl font-bold mb-5">You Might Also Like</div>
       <Carousel
         responsive={responsive}
-        containerClass="-mx-[10px]"
-        itemClass="px-[10px]"
+        containerclassName="-mx-[10px]"
+        itemclassName="px-[10px]"
       >
         {filteredProducts &&
           filteredProducts?.map((product) => (
