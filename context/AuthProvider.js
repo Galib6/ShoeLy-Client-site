@@ -9,6 +9,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import app from "@/Firebase/Firebase.config";
+import { API_URL } from "@/utils/urls";
 
 export const AuthContext = createContext();
 const auth = getAuth(app);
@@ -17,6 +18,14 @@ const AuthProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/cart`)
+      .then((res) => res.json())
+      .then((data) => {
+        setCart(data);
+      });
+  }, []);
 
   const createUser = (email, password) => {
     //console.log(email)

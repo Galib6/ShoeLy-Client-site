@@ -8,11 +8,18 @@ import PaymentsSIngleComponents from "@/components/PaymentsSIngleComponents";
 import { API_URL } from "@/utils/urls";
 import Wrapper from "@/components/Wrapper";
 import { ImSpinner3 } from "react-icons/im";
+import { useRouter } from "next/router";
 
 const Payment = () => {
-  const { cart, setCart } = useContext(AuthContext);
-  const [cartItems, setCartItems] = useState();
+  const { setCart, user } = useContext(AuthContext);
+  const [cartItems, setCartItems] = useState([]);
   const [loading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const ammount = router.query.payment;
+
+  useEffect(() => {
+    if (!user) router.push("/login");
+  }, [user]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -55,9 +62,7 @@ const Payment = () => {
             <div className="max-w-[600px]  col-span-5 mb-5">
               <Elements stripe={stripePromise}>
                 <CheckOut
-                //   ammount={ammount}
-                //   id={_id}
-                //   courseDetails={courseDetails}
+                  ammount={parseInt(ammount) - parseInt(ammount) * 0.15}
                 ></CheckOut>
               </Elements>
             </div>

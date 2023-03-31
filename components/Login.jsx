@@ -1,9 +1,11 @@
 import { AuthContext } from "@/context/AuthProvider";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useContext, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
+  const router = useRouter();
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
@@ -17,9 +19,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const { login, setLoading, setUser } = useContext(AuthContext);
 
-  //   const Location = useLocation();
-  //   const navigate = useNavigate();
-  //   const from = Location.state?.from?.pathname || "/";
+  const from = router.query.from || "/";
 
   const handleSignIn = (event) => {
     event.preventDefault();
@@ -32,6 +32,7 @@ const Login = () => {
         setError("");
         form.reset();
         setLoading(false);
+        router.push(from);
         toast.success("Seccessfully Logged in");
       })
       .catch((error) => {
