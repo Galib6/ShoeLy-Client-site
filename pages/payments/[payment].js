@@ -23,7 +23,7 @@ const Payment = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    fetch(`${API_URL}/api/cart`)
+    fetch(`${API_URL}/api/cart?email=${user?.email}`)
       .then((res) => res.json())
       .then((data) => {
         setCartItems(data);
