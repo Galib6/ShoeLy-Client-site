@@ -17,26 +17,25 @@ const Login = () => {
   };
 
   const [error, setError] = useState("");
-  const { login, setLoading, setUser } = useContext(AuthContext);
+  const { signIn, setLoading, setUser } = useContext(AuthContext);
 
   const from = router.query.from || "/";
 
   const handleSignIn = (event) => {
     event.preventDefault();
     const { email, password } = userInfo;
-    login(email, password)
+    signIn(email, password)
       .then((res) => {
         const user = res.user;
         // console.log(user);
         setUser(user);
         setError("");
-        form.reset();
+        event.target.reset();
         setLoading(false);
         router.push(from);
         toast.success("Seccessfully Logged in");
       })
       .catch((error) => {
-        console.error(error);
         setError(error.message);
       })
       .finally(() => {
@@ -122,6 +121,9 @@ const Login = () => {
                     </Link>
                   </div>
                 </div>
+                <p className="text-red-500 pl-2 mt-[-10px]">
+                  {error.slice(22, error.length - 2)}
+                </p>
                 <div>
                   <button
                     type="submit"

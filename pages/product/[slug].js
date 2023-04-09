@@ -12,19 +12,15 @@ import {
 import ReactMarkdown from "react-markdown";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useRouter } from "next/router";
 import { API_URL } from "@/utils/urls";
 import { ImSpinner8 } from "react-icons/im";
 import { AuthContext } from "@/context/AuthProvider";
 
-const ProductDetails = () => {
-  const { setCart, cart } = useContext(AuthContext);
-  const [product, setProduct] = useState();
-  const [sameCatProduct, setSameCatProduct] = useState();
+const ProductDetails = ({ product, sameProducts }) => {
+  const { setCart, cart, user } = useContext(AuthContext);
   const [selectedSize, setSelectedSize] = useState(null);
   const [showError, setShowError] = useState(false);
   const [cartLoading, setCartLoading] = useState(false);
-  const router = useRouter();
 
   const notify = () => {
     toast.success("Success. Check your cart!", {
@@ -39,32 +35,25 @@ const ProductDetails = () => {
     });
   };
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      const sProduct = await fetchDataFromApi(
-        `/api/singleproduct?id=${router?.query?.slug}`
-      );
-      setProduct(sProduct);
-    };
-    if (router?.query?.slug) {
-      fetchProduct();
-    }
-  }, [router?.query?.slug]);
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-      const sProduct = await fetchDataFromApi(`/api/catagory/${product?.pid}`);
-      setSameCatProduct(sProduct);
-    };
-    if (product?.pid) {
-      fetchProduct();
-    }
-  }, [product?.pid]);
-
   const handleAddToCart = () => {
     if (!selectedSize) return setShowError(true);
     setCartLoading(true);
     const { pid, title, suntitle, price, thumb, _id } = product;
+    if (!user) {
+      const productForCart = {
+        pid,
+        title,
+        suntitle,
+        price,
+        selectedSize,
+        thumb,
+        productId: _id,
+      };
+      setCart([...cart, productForCart]);
+      setCartLoading(false);
+      notify();
+      return;
+    }
     const productForCart = {
       pid,
       title,
@@ -73,20 +62,23 @@ const ProductDetails = () => {
       selectedSize,
       thumb,
       productId: _id,
+      user: user?.email,
     };
-    fetch(`${API_URL}/api/cart`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(productForCart),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setCartLoading(false);
-        setCart([...cart, productForCart]);
-        notify();
-      });
+    setCart([...cart, productForCart]);
+    if (user) {
+      fetch(`${API_URL}/api/cart`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(productForCart),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setCartLoading(false);
+          notify();
+        });
+    }
   };
 
   return (
@@ -227,12 +219,26 @@ const ProductDetails = () => {
           {/* right column end */}
         </div>
 
-        {sameCatProduct && (
-          <RelatedProducts sid={product._id} products={sameCatProduct} />
+        {sameProducts && (
+          <RelatedProducts sid={product._id} products={sameProducts} />
         )}
       </Wrapper>
     </div>
   );
 };
+
+export async function getServerSideProps(context) {
+  const { params } = context;
+
+  const res = await fetch(`${API_URL}/api/singleproduct?id=${params.slug}`);
+  const product = await res.json();
+
+  const res2 = await fetch(`${API_URL}/api/catagory/${product?.pid}`);
+  const sameProducts = await res2.json();
+
+  return {
+    props: { product, sameProducts },
+  };
+}
 
 export default ProductDetails;

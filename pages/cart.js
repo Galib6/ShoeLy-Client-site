@@ -6,11 +6,10 @@ import CartItem from "@/components/CartItem";
 import { AuthContext } from "@/context/AuthProvider";
 import { useQuery } from "@tanstack/react-query";
 import { API_URL } from "@/utils/urls";
+import { ImSpinner3 } from "react-icons/im";
 
 const Cart = () => {
-  const [loading, setLoading] = useState(false);
-
-  const { cart, setCart } = useContext(AuthContext);
+  const { cart, setCart, user } = useContext(AuthContext);
 
   let subTotal = 0;
   for (let i = 0; i < cart.length; i++) {
@@ -24,12 +23,23 @@ const Cart = () => {
   } = useQuery({
     queryKey: ["posts"],
     queryFn: async () => {
-      const res = await fetch(`${API_URL}/api/cart`);
-      const data = await res.json();
-      setCart(data);
-      return data;
+      if (user) {
+        const res = await fetch(`${API_URL}/api/cart?email=${user.email}`);
+        const data = await res.json();
+        setCart(data);
+        return data;
+      }
+      return;
     },
   });
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen w-full">
+        <ImSpinner3 className="animate-spin " />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full md:py-20">

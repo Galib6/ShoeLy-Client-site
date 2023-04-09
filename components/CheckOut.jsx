@@ -137,8 +137,8 @@ const CheckOut = ({ ammount }) => {
           <div>
             <h1 className="text-4xl">$ {ammount}</h1>
           </div>
+          <p className="text-[13px] text-green-500">15% Dicount added</p>
           <p className="text-[13px]">Due {Date().slice(4, 15)}</p>
-
           <p className="mt-5 font-bold">To:{user?.displayName}</p>
           <p className="my-1">From: Shoe.Ly Inc. </p>
           <p className="my-1 font-bold">

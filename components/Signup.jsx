@@ -1,19 +1,17 @@
 import { AuthContext } from "@/context/AuthProvider";
 import { GoogleAuthProvider } from "firebase/auth";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useContext, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
+import { toast } from "react-toastify";
 
 const Signup = () => {
-  const {
-    setUser,
-    setLoading,
-    createUser,
-    updateUserProfile,
-    signInwithGoolge,
-  } = useContext(AuthContext);
+  const { setUser, setLoading, createUser, updateUser, signInwithGoolge } =
+    useContext(AuthContext);
   const provider = new GoogleAuthProvider();
   const [error, setError] = useState("");
+  const router = useRouter();
 
   const [userInfo, setUserInfo] = useState({
     email: "",
@@ -35,11 +33,7 @@ const Signup = () => {
         const user = res.user;
         setUser(user);
         toast.success("Seccessfully Sign up");
-
-        const currentUser = {
-          email: user.email,
-        };
-        console.log(currentUser);
+        router.push("/");
       })
       .catch((err) => {
         console.error(err);
@@ -51,8 +45,10 @@ const Signup = () => {
       displayName: name,
       photoURL: photoURL,
     };
-    updateUserProfile(profile)
-      .then(() => {})
+    updateUser(profile)
+      .then(() => {
+        router.push("/");
+      })
       .catch((error) => console.log(error));
   };
 
@@ -64,11 +60,10 @@ const Signup = () => {
         const user = res.user;
         console.log(user);
         setError("");
-        form.reset();
+        event.target.reset();
         handleUpdateUser(name, photoURL);
       })
       .catch((error) => {
-        console.log(error);
         setError(error.message);
       });
   };
@@ -195,6 +190,7 @@ const Signup = () => {
                     </Link>
                   </div>
                 </div>
+                <p className="text-red-500">{error}</p>
                 <div>
                   <button
                     type="submit"
