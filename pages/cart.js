@@ -21,7 +21,7 @@ const Cart = () => {
     refetch,
     isLoading,
   } = useQuery({
-    queryKey: ["posts"],
+    queryKey: ["posts", user?.email],
     queryFn: async () => {
       const res = await fetch(`${API_URL}/api/cart?email=${user.email}`);
       const data = await res.json();
@@ -31,14 +31,6 @@ const Cart = () => {
       return data;
     },
   });
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen w-full">
-        <ImSpinner3 className="animate-spin " />
-      </div>
-    );
-  }
 
   return (
     <div className="w-full md:py-20">
