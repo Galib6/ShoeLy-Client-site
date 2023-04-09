@@ -23,13 +23,12 @@ const Cart = () => {
   } = useQuery({
     queryKey: ["posts"],
     queryFn: async () => {
-      if (user) {
-        const res = await fetch(`${API_URL}/api/cart?email=${user.email}`);
-        const data = await res.json();
+      const res = await fetch(`${API_URL}/api/cart?email=${user.email}`);
+      const data = await res.json();
+      if (data.length > 0) {
         setCart(data);
-        return data;
       }
-      return;
+      return data;
     },
   });
 
