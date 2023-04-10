@@ -55,7 +55,11 @@ const SearchComponent = () => {
         {results.length > 0 && query.length > 0 && (
           <div className="lg:w-[400px] absolute z-10 top-full mt-2 w-full rounded-md shadow-xl  bg-white divide-y divide-gray-200 ">
             {results.slice(0, 5).map((result) => (
-              <Link key={result._id} href={`/product/${result._id}`}>
+              <Link
+                key={result._id}
+                href={`/product/${result._id}`}
+                onClick={() => setQuery("")}
+              >
                 <div key={result._id} className="p-3">
                   <div className="flex justify-start items-center">
                     <img src={result.thumb} className="h-16 w-16" alt="" />

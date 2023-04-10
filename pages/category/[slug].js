@@ -4,8 +4,10 @@ import ProductCard from "@/components/ProductCard";
 import { fetchDataFromApi } from "@/utils/api";
 import { useRouter } from "next/router";
 import Pagination from "@/components/Pagination";
+import RelatedProducts from "@/components/RelatedProducts";
+import { API_URL } from "@/utils/urls";
 
-const Category = () => {
+const Category = ({ relatedProducts }) => {
   const [products, setProducts] = useState();
   const [catName, setCatName] = useState();
   const [isLoading, setIsLoading] = useState(true);
@@ -44,11 +46,10 @@ const Category = () => {
   return (
     <div className="w-full md:py-20 relative">
       <Wrapper>
-        <div className="text-center max-w-[800px] mx-auto mt-8 md:mt-0">
-          <div className="text-[28px] md:text-[34px] mb-5 font-semibold leading-tight">
-            {catName}
-          </div>
+        <div className="text-[28px] md:text-[34px] mb-5 font-semibold leading-tight">
+          {catName}
         </div>
+        <hr />
 
         {/* products grid start */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 my-14 px-5 md:px-0">
@@ -59,14 +60,16 @@ const Category = () => {
         {/* products grid end */}
 
         {/* PAGINATION BUTTONS START */}
-        {slicedProduct && (
-          <Pagination
-            currentPage={currentPage}
-            SetCurrentPage={SetCurrentPage}
-            postsPerPage={postsPerPage}
-            products={products}
-          ></Pagination>
-        )}
+        <div className="mb-32">
+          {slicedProduct && (
+            <Pagination
+              currentPage={currentPage}
+              SetCurrentPage={SetCurrentPage}
+              postsPerPage={postsPerPage}
+              products={products}
+            ></Pagination>
+          )}
+        </div>
         {/* PAGINATION BUTTONS END */}
 
         {isLoading && (
@@ -83,9 +86,21 @@ const Category = () => {
             </div>
           </div>
         )}
+        <div className="mt-[-50px]">
+          <RelatedProducts sid={""} products={relatedProducts} />
+        </div>
       </Wrapper>
     </div>
   );
 };
 
 export default Category;
+
+export async function getServerSideProps(context) {
+  const Products = await fetch(`${API_URL}/api/catagory/3`);
+  const relatedProducts = await Products.json();
+
+  return {
+    props: { relatedProducts },
+  };
+}

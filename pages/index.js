@@ -6,10 +6,10 @@ import { fetchDataFromApi } from "@/utils/api";
 import { API_URL } from "@/utils/urls";
 import React, { useEffect, useState } from "react";
 
-const index = ({ posts }) => {
+const index = ({ posts, relatedProducts }) => {
   return (
     <>
-      <HomePage posts={posts}></HomePage>
+      <HomePage posts={posts} relatedProducts={relatedProducts}></HomePage>
     </>
   );
 };
@@ -17,9 +17,11 @@ const index = ({ posts }) => {
 export async function getServerSideProps(context) {
   const res = await fetch(`${API_URL}/api/allproduct`);
   const data = await res.json();
+  const Products = await fetch(`${API_URL}/api/catagory/4`);
+  const relatedProducts = await Products.json();
 
   return {
-    props: { posts: data },
+    props: { posts: data, relatedProducts },
   };
 }
 export default index;
