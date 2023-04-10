@@ -1,3 +1,4 @@
+import { API_URL } from "@/utils/urls";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
@@ -11,7 +12,7 @@ const SearchComponent = () => {
 
   useEffect(() => {
     if (query) {
-      fetch(`http://localhost:5000/api/search?term=${query}`)
+      fetch(`${API_URL}/api/search?term=${query}`)
         .then((res) => res.json())
         .then((res) => {
           setResults(res);
