@@ -7,6 +7,7 @@ import AuthProvider from "@/context/AuthProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Helmet } from "react-helmet";
 
 export default function App({ Component, pageProps }) {
   const queryClient = new QueryClient();
@@ -28,6 +29,12 @@ export default function App({ Component, pageProps }) {
           rel="stylesheet"
         />
       </Head>
+      <Helmet>
+        <script
+          src="//code.tidio.co/ywzsy9lxhnx2aerwnzyepsrcljj9x7yq.js"
+          async
+        ></script>
+      </Helmet>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <Header />
