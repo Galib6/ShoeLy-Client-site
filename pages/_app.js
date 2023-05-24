@@ -1,13 +1,12 @@
 import "@/styles/globals.css";
 import Head from "next/head";
-
-import Header from "@/components/header";
 import Footer from "@/components/Footer";
 import AuthProvider from "@/context/AuthProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Helmet } from "react-helmet";
+import Header from "@/components/Header";
 
 export default function App({ Component, pageProps }) {
   const queryClient = new QueryClient();
