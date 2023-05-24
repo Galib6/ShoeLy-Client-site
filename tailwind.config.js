@@ -10,6 +10,7 @@ module.exports = {
   ],
   theme: {
     fontFamily: {
+      themes: ["light"],
       oswald: "Oswald, sans-serif",
       urbanist: "Urbanist, sans-serif",
     },
