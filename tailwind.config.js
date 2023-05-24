@@ -10,11 +10,13 @@ module.exports = {
   ],
   theme: {
     fontFamily: {
-      themes: ["light"],
       oswald: "Oswald, sans-serif",
       urbanist: "Urbanist, sans-serif",
     },
     extend: {},
   },
   plugins: [require("daisyui")],
+  daisyui: {
+    themes: ["light"],
+  },
 };
