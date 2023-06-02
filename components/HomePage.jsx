@@ -7,6 +7,7 @@ import ProductCard from "./ProductCard";
 import VIdeoCOmponent from "./VIdeoCOmponent";
 import Wrapper from "./Wrapper";
 import RelatedProducts from "./RelatedProducts";
+import MembershipBanner from "./MembershipBanner";
 
 const HomePage = ({ posts: products, relatedProducts }) => {
   return (
@@ -97,6 +98,7 @@ const HomePage = ({ posts: products, relatedProducts }) => {
         </div>
 
         <BrandBanner></BrandBanner>
+        <MembershipBanner></MembershipBanner>
       </Wrapper>
     </main>
   );
