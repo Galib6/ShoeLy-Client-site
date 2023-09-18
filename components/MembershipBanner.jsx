@@ -5,7 +5,9 @@ const MembershipBanner = () => {
   return (
     <div className="bg-black p-5 mb-4">
       <h1 className="text-white text-6xl font-extrabold">
-        BECOME A <br /> MEMBER
+        BECOME A <br /> MEMBER 
+
+        
       </h1>
       <p className="text-white my-2">Sign up free. Join the Community.</p>
       <div className="space-x-3">
